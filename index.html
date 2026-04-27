@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل حوكمة البيانات | Data Governance Guide — DMBOK2</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1f3c;
+    --gold: #c8973a;
+    --gold-light: #e8b84b;
+    --gold-pale: #fdf6e3;
+    --cream: #faf8f3;
+    --ink: #1a1a2e;
+    --muted: #6b7280;
+    --border: rgba(200,151,58,0.25);
+    --card-bg: #ffffff;
+    --section-bg: rgba(13,31,60,0.03);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', 'Amiri', serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.85;
+  }
+
+  body.en { font-family: 'Source Serif 4', 'Playfair Display', serif; direction: ltr; }
+  body.en * { direction: ltr; }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    gap: 1rem;
+  }
+
+  .header-title {
+    color: var(--gold);
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .header-title small {
+    display: block;
+    font-size: 0.72rem;
+    color: rgba(200,151,58,0.65);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .lang-btn {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 0.5rem 1.3rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.1s;
+    font-family: 'Cairo', serif;
+    letter-spacing: 0.5px;
+  }
+
+  .lang-btn:hover { background: var(--gold-light); transform: scale(1.03); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a2d5a 60%, #0d1f3c 100%);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(200,151,58,0.08) 0%, transparent 60%);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.75rem;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  .hero h1 {
+    color: #fff;
+    font-size: clamp(1.7rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 0.8rem;
+    position: relative;
+  }
+
+  .hero h1 span { color: var(--gold); }
+
+  .hero p {
+    color: rgba(255,255,255,0.7);
+    max-width: 650px;
+    margin: 0 auto 2rem;
+    font-size: 1rem;
+    position: relative;
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  .hero-meta span {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .hero-meta span b { color: var(--gold-light); }
+
+  /* TOC */
+  .toc-wrapper {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .toc-card {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid rgba(200,151,58,0.2);
+  }
+
+  .toc-title {
+    color: var(--gold);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .toc-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .toc-item {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.82rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .toc-item:hover {
+    background: rgba(200,151,58,0.12);
+    border-color: var(--border);
+    color: var(--gold-light);
+  }
+
+  .toc-item .num {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.7rem;
+    min-width: 22px;
+  }
+
+  /* MAIN CONTENT */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 2.5rem;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    background: var(--navy);
+    padding: 1.2rem 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .section-header:hover { background: #16285a; }
+
+  .section-num {
+    background: var(--gold);
+    color: var(--navy);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .section-title-wrap { flex: 1; }
+
+  .section-title {
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .section-subtitle {
+    color: rgba(200,151,58,0.7);
+    font-size: 0.75rem;
+    margin-top: 2px;
+  }
+
+  .section-arrow {
+    color: var(--gold);
+    font-size: 1.1rem;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .section.open .section-arrow { transform: rotate(180deg); }
+
+  .section-body {
+    display: none;
+    padding: 1.8rem;
+  }
+
+  .section.open .section-body { display: block; }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a2d5a 100%);
+    border-radius: 10px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.5rem;
+    border-right: 4px solid var(--gold);
+    position: relative;
+  }
+
+  body.en .def-box { border-right: none; border-left: 4px solid var(--gold); }
+
+  .def-box .def-label {
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .def-box p {
+    color: #fff;
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  /* CONTENT BLOCKS */
+  .content-prose {
+    color: #374151;
+    font-size: 0.95rem;
+    line-height: 2;
+    margin-bottom: 1.2rem;
+  }
+
+  .subsection-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 1.4rem 0 0.8rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .subsection-title::before {
+    content: '◆';
+    color: var(--gold);
+    font-size: 0.6rem;
+  }
+
+  /* CARDS GRID */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .card {
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(200,151,58,0.12);
+  }
+
+  .card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .card-desc {
+    color: #6b7280;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  /* PILLS */
+  .pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
+
+  .pill {
+    background: var(--navy);
+    color: var(--gold-light);
+    font-size: 0.78rem;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .pill.outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--navy);
+  }
+
+  /* TABLE */
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .styled-table th {
+    background: var(--navy);
+    color: var(--gold);
+    padding: 0.8rem 1rem;
+    text-align: right;
+    font-weight: 700;
+  }
+
+  body.en .styled-table th { text-align: left; }
+
+  .styled-table td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: #374151;
+    vertical-align: top;
+  }
+
+  .styled-table tr:nth-child(even) td { background: var(--section-bg); }
+  .styled-table tr:last-child td { border-bottom: none; }
+
+  .styled-table td:first-child {
+    font-weight: 700;
+    color: var(--navy);
+    white-space: nowrap;
+  }
+
+  /* STEWARD TYPES */
+  .steward-list { list-style: none; margin: 0.8rem 0; }
+
+  .steward-list li {
+    display: flex;
+    gap: 0.8rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    align-items: flex-start;
+  }
+
+  .steward-list li:last-child { border-bottom: none; }
+
+  .steward-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.68rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 700;
+    white-space: nowrap;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  /* PYRAMID */
+  .pyramid-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 1.5rem 0;
+  }
+
+  .pyramid-level {
+    border-radius: 8px;
+    padding: 0.7rem 2rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: #fff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .pyramid-level .pct {
+    font-size: 0.72rem;
+    opacity: 0.8;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .pyramid-level:nth-child(1) { background: #0d1f3c; width: 60%; }
+  .pyramid-level:nth-child(2) { background: #1a3a6b; width: 73%; }
+  .pyramid-level:nth-child(3) { background: #2a5298; width: 86%; }
+  .pyramid-level:nth-child(4) { background: #c8973a; width: 100%; color: var(--navy); }
+
+  .pyramid-arrow {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 2px 0;
+  }
+
+  /* METRICS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.8rem;
+    margin: 1rem 0;
+  }
+
+  .metric-card {
+    background: var(--navy);
+    border-radius: 10px;
+    padding: 1.1rem;
+    border: 1px solid rgba(200,151,58,0.2);
+  }
+
+  .metric-category {
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .metric-item {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.8rem;
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .metric-item::before {
+    content: '•';
+    color: var(--gold);
+    font-size: 1rem;
+  }
+
+  /* TIPS BOX */
+  .tips-box {
+    background: linear-gradient(135deg, #fff8e8, #fef3cd);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .tips-box .tips-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tips-box p {
+    color: #4b3f00;
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
+  /* REMEMBER BOX */
+  .remember {
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 1rem 1.4rem;
+    margin-top: 1.2rem;
+    color: var(--gold-light);
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  /* FRAMEWORK DIAGRAM */
+  .framework-diagram {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    margin: 1.2rem 0;
+  }
+
+  .fd-center {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fd-node {
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.7rem;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .fd-main {
+    background: var(--navy);
+    color: var(--gold);
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.75rem;
+    text-align: center;
+    border: 3px solid var(--gold);
+  }
+
+  /* COPYRIGHT FOOTER */
+  .copyright-bar {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .copyright-bar strong { color: var(--navy); }
+
+  /* HIDE/SHOW CONTENT */
+  .ar { display: block; }
+  .en-text { display: none; }
+
+  body.en .ar { display: none !important; }
+  body.en .en-text { display: block !important; }
+
+  /* ADCM */
+  .model-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.7rem;
+    margin: 1rem 0;
+  }
+
+  .model-card {
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid rgba(200,151,58,0.2);
+  }
+
+  .model-card .m-title {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .model-card .m-desc {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.77rem;
+    line-height: 1.6;
+  }
+
+  /* Scroll smooth */
+  html { scroll-behavior: smooth; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .header-inner { padding: 0 1rem; }
+    .hero { padding: 2.5rem 1rem 2rem; }
+    .toc-grid { grid-template-columns: 1fr 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .framework-diagram { grid-template-columns: 1fr; }
+    .pyramid-level { width: 100% !important; }
+  }
+
+  /* Notice */
+  .study-notice {
+    background: linear-gradient(135deg, #e8f4fd, #dbeafe);
+    border: 1px solid #93c5fd;
+    border-radius: 10px;
+    padding: 1rem 1.4rem;
+    margin-bottom: 2rem;
+    font-size: 0.85rem;
+    color: #1e40af;
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+  }
+
+  .study-notice .icon { font-size: 1.2rem; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="header-title">
+      <span class="ar">حوكمة البيانات — الدليل الشامل</span>
+      <span class="en-text">Data Governance — Complete Study Guide</span>
+      <small class="ar">استناداً إلى DAMA-DMBOK2 | الفصل الثالث</small>
+      <small class="en-text">Based on DAMA-DMBOK2 | Chapter 3</small>
+    </div>
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">🌐 English</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge ar">دليل الدراسة والحفظ</div>
+  <div class="hero-badge en-text">Study & Mastery Guide</div>
+  <h1 class="ar">حوكمة البيانات في <span>المؤسسات</span></h1>
+  <h1 class="en-text">Data Governance in <span>Enterprises</span></h1>
+  <p class="ar">دليلك الشامل لفهم وحفظ حوكمة البيانات بناءً على DAMA-DMBOK2 — مُعدّ لمرشّحي CDMP والمحللين المحترفين</p>
+  <p class="en-text">Your complete guide to understanding and mastering Data Governance based on DAMA-DMBOK2 — designed for CDMP candidates and data professionals</p>
+  <div class="hero-meta">
+    <span>📘 <b class="ar">المصدر:</b><b class="en-text">Source:</b> DAMA-DMBOK2, Ch.3</span>
+    <span>📊 <b class="ar">30+</b><b class="en-text">30+</b> <span class="ar">مفهوماً أساسياً</span><span class="en-text">Core Concepts</span></span>
+    <span>🎯 <span class="ar">موجّه لـ CDMP</span><span class="en-text">CDMP-oriented</span></span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc-wrapper">
+  <div class="toc-card">
+    <div class="toc-title ar">📋 فهرس المحتويات — انقر للانتقال</div>
+    <div class="toc-title en-text">📋 Table of Contents — Click to Navigate</div>
+    <div class="toc-grid">
+      <div class="toc-item" onclick="openSection('s1')"><span class="num">01</span><span class="ar">تعريف حوكمة البيانات</span><span class="en-text">DG Definition</span></div>
+      <div class="toc-item" onclick="openSection('s2')"><span class="num">02</span><span class="ar">المحركات التجارية</span><span class="en-text">Business Drivers</span></div>
+      <div class="toc-item" onclick="openSection('s3')"><span class="num">03</span><span class="ar">الأهداف والمبادئ</span><span class="en-text">Goals & Principles</span></div>
+      <div class="toc-item" onclick="openSection('s4')"><span class="num">04</span><span class="ar">المفاهيم الأساسية</span><span class="en-text">Essential Concepts</span></div>
+      <div class="toc-item" onclick="openSection('s5')"><span class="num">05</span><span class="ar">هيكل منظمة الحوكمة</span><span class="en-text">DG Organization</span></div>
+      <div class="toc-item" onclick="openSection('s6')"><span class="num">06</span><span class="ar">أنواع نماذج التشغيل</span><span class="en-text">Operating Model Types</span></div>
+      <div class="toc-item" onclick="openSection('s7')"><span class="num">07</span><span class="ar">الإشراف على البيانات</span><span class="en-text">Data Stewardship</span></div>
+      <div class="toc-item" onclick="openSection('s8')"><span class="num">08</span><span class="ar">السياسات والقيم</span><span class="en-text">Policies & Asset Value</span></div>
+      <div class="toc-item" onclick="openSection('s9')"><span class="num">09</span><span class="ar">أنشطة التطبيق</span><span class="en-text">Implementation Activities</span></div>
+      <div class="toc-item" onclick="openSection('s10')"><span class="num">10</span><span class="ar">الأدوات والتقنيات</span><span class="en-text">Tools & Techniques</span></div>
+      <div class="toc-item" onclick="openSection('s11')"><span class="num">11</span><span class="ar">مقاييس الأداء</span><span class="en-text">Metrics</span></div>
+      <div class="toc-item" onclick="openSection('s12')"><span class="num">12</span><span class="ar">بطاقة المراجعة السريعة</span><span class="en-text">Quick Recall Card</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- STUDY NOTICE -->
+  <div class="study-notice">
+    <div class="icon">🎓</div>
+    <div>
+      <span class="ar"><strong>ملاحظة المُعدّ:</strong> هذا الدليل أُعدّ لمرشّح CDMP وPBI Analyst متخصص. كل قسم يتضمن تعريفاً، شرحاً، وبطاقات للحفظ. انقر على كل قسم لفتحه. يمكن تبديل اللغة في أي وقت.</span>
+      <span class="en-text"><strong>Preparer's Note:</strong> This guide is designed for a CDMP candidate and PBI Analyst. Each section includes a definition, explanation, and memory aids. Click any section to expand. Language can be toggled anytime.</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1: DEFINITION -->
+  <div class="section open" id="s1">
+    <div class="section-header" onclick="toggleSection('s1')">
+      <div class="section-num">01</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">تعريف حوكمة البيانات</div>
+        <div class="section-title en-text">Data Governance Definition</div>
+        <div class="section-subtitle ar">ما هي؟ ولماذا تهمّنا؟</div>
+        <div class="section-subtitle en-text">What is it? Why does it matter?</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="def-box">
+        <div class="def-label ar">التعريف الرسمي — DAMA-DMBOK2</div>
+        <div class="def-label en-text">Official Definition — DAMA-DMBOK2</div>
+        <p class="ar">حوكمة البيانات هي: ممارسة السلطة والرقابة (التخطيط والتطبيق والمراقبة والإنفاذ) على إدارة أصول البيانات.</p>
+        <p class="en-text">Data Governance is: the exercise of authority and control (planning, implementation, monitoring, and enforcement) over the management of data assets.</p>
+      </div>
+
+      <p class="content-prose ar">جميع المؤسسات تتخذ قرارات بشأن البيانات، سواء كان لديها وظيفة رسمية لحوكمة البيانات أم لا. أما تلك التي تُنشئ وظيفة حوكمة رسمية، فإنها تمارس هذه السلطة بنية أوضح وتستطيع الحصول على قيمة أعلى من أصول بياناتها.</p>
+      <p class="content-prose en-text">All organizations make decisions about data whether or not they have a formal Data Governance function. Those that establish a formal DG function exercise authority with greater intentionality and are better able to increase value from their data assets.</p>
+
+      <div class="subsection-title ar">🔑 نطاق حوكمة البيانات — ما الذي تشمله؟</div>
+      <div class="subsection-title en-text">🔑 Scope of Data Governance — What does it cover?</div>
+
+      <div class="cards-grid">
+        <div class="card"><div class="card-icon">🧭</div><div class="card-title ar">الاستراتيجية</div><div class="card-title en-text">Strategy</div><div class="card-desc ar">تحديد استراتيجية البيانات والحوكمة والإشراف على تنفيذها</div><div class="card-desc en-text">Defining, communicating, and driving execution of Data Strategy and DG Strategy</div></div>
+        <div class="card"><div class="card-icon">📜</div><div class="card-title ar">السياسات</div><div class="card-title en-text">Policy</div><div class="card-desc ar">وضع سياسات دورة حياة البيانات والبيانات الوصفية وإنفاذها</div><div class="card-desc en-text">Setting and enforcing policies related to data and Metadata lifecycle</div></div>
+        <div class="card"><div class="card-icon">📐</div><div class="card-title ar">المعايير</div><div class="card-title en-text">Standards</div><div class="card-desc ar">تحديد معايير إدارة البيانات وإنفاذها</div><div class="card-desc en-text">Setting and enforcing Data Management standards</div></div>
+        <div class="card"><div class="card-icon">👁️</div><div class="card-title ar">الرقابة</div><div class="card-title en-text">Oversight</div><div class="card-desc ar">المراقبة والتدقيق والتصحيح في مجالات الجودة والأمان والخصوصية</div><div class="card-desc en-text">Hands-on observation, audit, and correction in quality, privacy, security</div></div>
+        <div class="card"><div class="card-icon">⚖️</div><div class="card-title ar">الامتثال</div><div class="card-title en-text">Compliance</div><div class="card-desc ar">ضمان استيفاء المتطلبات التنظيمية المتعلقة بالبيانات</div><div class="card-desc en-text">Ensuring the organization meets data-related regulatory requirements</div></div>
+        <div class="card"><div class="card-icon">🔧</div><div class="card-title ar">إدارة المشكلات</div><div class="card-title en-text">Issue Management</div><div class="card-desc ar">تحديد المشكلات المتعلقة بأمن البيانات وجودتها والامتثال وحلّها</div><div class="card-desc en-text">Identifying, escalating, and resolving data security, quality, compliance issues</div></div>
+        <div class="card"><div class="card-icon">🚀</div><div class="card-title ar">مشاريع إدارة البيانات</div><div class="card-title en-text">Data Management Projects</div><div class="card-desc ar">رعاية الجهود الرامية إلى تحسين ممارسات إدارة البيانات</div><div class="card-desc en-text">Sponsoring efforts to improve data management practices</div></div>
+        <div class="card"><div class="card-icon">💎</div><div class="card-title ar">تقييم الأصول</div><div class="card-title en-text">Asset Valuation</div><div class="card-desc ar">وضع معايير لتحديد القيمة التجارية لأصول البيانات</div><div class="card-desc en-text">Setting standards to define the business value of data assets</div></div>
+      </div>
+
+      <div class="remember ar">💡 <strong>للحفظ:</strong> حوكمة البيانات = سلطة + رقابة + تخطيط + إنفاذ. الهدف الأسمى: جعل البيانات أصلاً حقيقياً تُدار بشكل صحيح وفق سياسات وأفضل الممارسات.</div>
+      <div class="remember en-text">💡 <strong>Remember:</strong> DG = authority + control + planning + enforcement. Ultimate goal: make data a properly managed asset according to policies and best practices.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: BUSINESS DRIVERS -->
+  <div class="section" id="s2">
+    <div class="section-header" onclick="toggleSection('s2')">
+      <div class="section-num">02</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">المحركات التجارية لحوكمة البيانات</div>
+        <div class="section-title en-text">Business Drivers of Data Governance</div>
+        <div class="section-subtitle ar">لماذا تتبنّى المؤسسات الحوكمة؟</div>
+        <div class="section-subtitle en-text">Why do organizations adopt governance?</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <p class="content-prose ar">المحرك الأكثر شيوعاً هو <strong>الامتثال التنظيمي</strong>، خاصة في القطاعات المنظمة كالمال والرعاية الصحية. كما أن ثورة التحليلات وعلوم البيانات تمثّل دافعاً إضافياً. في كثير من الأحيان تأتي الحوكمة كحل لمشكلة تجارية محددة — مثلاً: احتياج بيانات العملاء ← تطوير MDM ← إدراك أن MDM يحتاج حوكمة.</p>
+      <p class="content-prose en-text">The most common driver is <strong>regulatory compliance</strong>, especially in heavily regulated industries. The explosion in analytics and Data Science is an additional force. DG often comes as a solution to a specific business problem — e.g., need better customer data → develop MDM → realize MDM requires DG.</p>
+
+      <div class="subsection-title ar">⬇️ تقليل المخاطر</div>
+      <div class="subsection-title en-text">⬇️ Reducing Risk</div>
+      <div class="pills">
+        <span class="pill ar">إدارة المخاطر العامة</span><span class="pill ar">أمن البيانات</span><span class="pill ar">حماية الخصوصية وPII</span>
+        <span class="pill en-text">General Risk Management</span><span class="pill en-text">Data Security</span><span class="pill en-text">Privacy & PII Protection</span>
+      </div>
+
+      <div class="subsection-title ar">⬆️ تحسين العمليات</div>
+      <div class="subsection-title en-text">⬆️ Improving Processes</div>
+      <div class="pills">
+        <span class="pill outline ar">الامتثال التنظيمي</span>
+        <span class="pill outline ar">تحسين جودة البيانات</span>
+        <span class="pill outline ar">إدارة البيانات الوصفية</span>
+        <span class="pill outline ar">كفاءة التطوير</span>
+        <span class="pill outline ar">إدارة الموردين</span>
+        <span class="pill outline en-text">Regulatory Compliance</span>
+        <span class="pill outline en-text">Data Quality Improvement</span>
+        <span class="pill outline en-text">Metadata Management</span>
+        <span class="pill outline en-text">Development Efficiency</span>
+        <span class="pill outline en-text">Vendor Management</span>
+      </div>
+
+      <div class="tips-box">
+        <div class="tips-title ar">🔑 تشبيه مفيد للحفظ</div>
+        <div class="tips-title en-text">🔑 Useful Analogy for Memory</div>
+        <p class="ar">حوكمة البيانات تُشبه <strong>المحاسبة والتدقيق المالي</strong>: المدققون يضعون قواعد لإدارة الأصول المالية. محترفو حوكمة البيانات يضعون قواعد لإدارة أصول البيانات. الآخرون ينفّذون هذه القواعد.</p>
+        <p class="en-text">DG is like <strong>auditing and accounting</strong>: Auditors set rules for managing financial assets. DG professionals set rules for managing data assets. Others carry out these rules.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: GOALS & PRINCIPLES -->
+  <div class="section" id="s3">
+    <div class="section-header" onclick="toggleSection('s3')">
+      <div class="section-num">03</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">الأهداف والمبادئ</div>
+        <div class="section-title en-text">Goals & Principles</div>
+        <div class="section-subtitle ar">إلى أين نتجه وعلى أي أساس؟</div>
+        <div class="section-subtitle en-text">Where are we headed and on what basis?</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="def-box">
+        <div class="def-label ar">الهدف الرئيسي</div>
+        <div class="def-label en-text">Primary Goal</div>
+        <p class="ar">تمكين المؤسسة من إدارة البيانات بوصفها <strong>أصلاً استراتيجياً</strong>.</p>
+        <p class="en-text">Enable an organization to manage data as a <strong>strategic asset</strong>.</p>
+      </div>
+
+      <div class="subsection-title ar">الشروط الثلاثة لوظيفة حوكمة فعّالة</div>
+      <div class="subsection-title en-text">Three Requirements for an Effective DG Function</div>
+      <div class="cards-grid">
+        <div class="card"><div class="card-icon">🌱</div><div class="card-title ar">مستدامة (Sustainable)</div><div class="card-title en-text">Sustainable</div><div class="card-desc ar">ليست مشروعاً له نهاية — بل وظيفة مؤسسية مستمرة تعتمد على قيادة الأعمال والرعاية والملكية.</div><div class="card-desc en-text">Not a project with a defined end — an enterprise function requiring ongoing organizational commitment and business leadership.</div></div>
+        <div class="card"><div class="card-icon">🔗</div><div class="card-title ar">مُدمجة (Embedded)</div><div class="card-title en-text">Embedded</div><div class="card-desc ar">ليست عملية إضافية — يجب دمجها في تطوير البرمجيات وتحليلات البيانات وإدارة المخاطر.</div><div class="card-desc en-text">Not an add-on process — must be incorporated into software development, analytics, and risk management.</div></div>
+        <div class="card"><div class="card-icon">📏</div><div class="card-title ar">قابلة للقياس (Measured)</div><div class="card-title en-text">Measured</div><div class="card-desc ar">لها أثر مالي إيجابي، لكن إثبات ذلك يتطلب فهم نقطة البداية والتخطيط للتحسين القابل للقياس.</div><div class="card-desc en-text">Has positive financial impact, but demonstrating it requires understanding the baseline and planning for measurable improvement.</div></div>
+      </div>
+
+      <div class="subsection-title ar">المبادئ التأسيسية لحوكمة البيانات</div>
+      <div class="subsection-title en-text">Foundational Principles of Data Governance</div>
+      <table class="styled-table">
+        <tr><th class="ar">المبدأ</th><th class="ar">المعنى</th><th class="en-text">Principle</th><th class="en-text">Meaning</th></tr>
+        <tr><td class="ar">القيادة والاستراتيجية</td><td class="ar">تبدأ الحوكمة الناجحة بقيادة ملتزمة وذات رؤية</td><td class="en-text">Leadership & Strategy</td><td class="en-text">Starts with visionary and committed leadership</td></tr>
+        <tr><td class="ar">موجّهة بالأعمال</td><td class="ar">وظيفة تجارية أولاً، تحكم قرارات الأعمال وقرارات تقنية المعلومات</td><td class="en-text">Business-driven</td><td class="en-text">A business function governing both business and IT data decisions</td></tr>
+        <tr><td class="ar">مسؤولية مشتركة</td><td class="ar">تشمل مشرفي الأعمال ومتخصصي إدارة البيانات معاً</td><td class="en-text">Shared Responsibility</td><td class="en-text">Shared between business data stewards and technical DM professionals</td></tr>
+        <tr><td class="ar">متعددة المستويات</td><td class="ar">تعمل على مستوى المؤسسة والمستويات المحلية</td><td class="en-text">Multi-layered</td><td class="en-text">Occurs at both enterprise and local levels</td></tr>
+        <tr><td class="ar">قائمة على الإطار</td><td class="ar">تحدد المسؤوليات والتفاعلات بين الوظائف</td><td class="en-text">Framework-based</td><td class="en-text">Defines accountabilities and interactions across functional areas</td></tr>
+        <tr><td class="ar">قائمة على المبادئ</td><td class="ar">المبادئ الموجّهة هي أساس الحوكمة والسياسات</td><td class="en-text">Principle-based</td><td class="en-text">Guiding principles are the foundation of DG activities and policy</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 4: ESSENTIAL CONCEPTS -->
+  <div class="section" id="s4">
+    <div class="section-header" onclick="toggleSection('s4')">
+      <div class="section-num">04</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">المفاهيم الأساسية</div>
+        <div class="section-title en-text">Essential Concepts</div>
+        <div class="section-subtitle ar">الفرق بين الحوكمة والإدارة | المؤسسة المُتمحورة حول البيانات</div>
+        <div class="section-subtitle en-text">Governance vs Management | Data-centric Organization</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="def-box">
+        <div class="def-label ar">الفرق الجوهري</div>
+        <div class="def-label en-text">The Core Distinction</div>
+        <p class="ar"><strong>حوكمة البيانات</strong> = ضمان الإدارة السليمة للبيانات (الإشراف / Oversight)<br><strong>إدارة البيانات</strong> = الإدارة الفعلية لتحقيق الأهداف (التنفيذ / Execution)</p>
+        <p class="en-text"><strong>Data Governance</strong> = Ensuring data is managed properly (Oversight)<br><strong>Data Management</strong> = Managing data to achieve goals (Execution)</p>
+      </div>
+
+      <p class="content-prose ar">تماماً كما أن المدقق يتحكم في العمليات المالية دون أن ينفّذ الإدارة المالية، فإن حوكمة البيانات تضمن الإدارة السليمة دون أن تقوم بالتنفيذ المباشر. هذا يمثّل فصلاً جوهرياً بين الرقابة والتنفيذ.</p>
+      <p class="content-prose en-text">Just as an auditor controls financial processes without executing financial management, DG ensures data is properly managed without directly executing it. This represents an inherent separation of duty between oversight and execution.</p>
+
+      <div class="subsection-title ar">🏢 المؤسسة المُتمحورة حول البيانات</div>
+      <div class="subsection-title en-text">🏢 The Data-centric Organization</div>
+      <p class="content-prose ar">تُقدّر البيانات كأصل وتديرها عبر كافة مراحل دورة حياتها. لكي تصبح كذلك، تحتاج المؤسسات إلى تحوّل ثقافي حقيقي.</p>
+      <p class="content-prose en-text">Values data as an asset and manages it through all phases of its lifecycle. To become data-centric, organizations need a genuine cultural shift.</p>
+      <div class="pills">
+        <span class="pill ar">البيانات أصل مؤسسي</span>
+        <span class="pill ar">تحفيز أفضل الممارسات</span>
+        <span class="pill ar">استراتيجية البيانات تتوافق مع الأعمال</span>
+        <span class="pill ar">تحسين مستمر للعمليات</span>
+        <span class="pill en-text">Data as Corporate Asset</span>
+        <span class="pill en-text">Incentivize Best Practices</span>
+        <span class="pill en-text">Data Strategy Aligned with Business</span>
+        <span class="pill en-text">Continuous Process Improvement</span>
+      </div>
+
+      <div class="subsection-title ar">الفرق بين حوكمة البيانات وحوكمة تقنية المعلومات</div>
+      <div class="subsection-title en-text">DG vs. IT Governance</div>
+      <table class="styled-table">
+        <tr><th class="ar">الجانب</th><th class="ar">حوكمة البيانات</th><th class="ar">حوكمة تقنية المعلومات</th><th class="en-text">Aspect</th><th class="en-text">Data Governance</th><th class="en-text">IT Governance</th></tr>
+        <tr><td class="ar">التركيز</td><td class="ar">أصول البيانات</td><td class="ar">الاستثمارات التقنية</td><td class="en-text">Focus</td><td class="en-text">Data assets</td><td class="en-text">IT investments</td></tr>
+        <tr><td class="ar">النطاق</td><td class="ar">البيانات كأصل تجاري</td><td class="ar">الأجهزة والبرمجيات والبنية</td><td class="en-text">Scope</td><td class="en-text">Data as business asset</td><td class="en-text">Hardware, software, architecture</td></tr>
+        <tr><td class="ar">المعيار المرجعي</td><td class="ar">DAMA-DMBOK</td><td class="ar">COBIT</td><td class="en-text">Reference Standard</td><td class="en-text">DAMA-DMBOK</td><td class="en-text">COBIT</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 5: DG ORGANIZATION -->
+  <div class="section" id="s5">
+    <div class="section-header" onclick="toggleSection('s5')">
+      <div class="section-num">05</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">هيكل منظمة حوكمة البيانات</div>
+        <div class="section-title en-text">Data Governance Organization Structure</div>
+        <div class="section-subtitle ar">الهيئات والمجالس والأدوار</div>
+        <div class="section-subtitle en-text">Bodies, Councils & Roles</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <p class="content-prose ar">تُشبه حوكمة البيانات من الناحية السياسية: تتضمن وظائف تشريعية (تحديد السياسات والمعايير)، وقضائية (إدارة المشكلات والتصعيد)، وتنفيذية (الحماية والمسؤوليات الإدارية).</p>
+      <p class="content-prose en-text">DG can be understood in terms of political governance: legislative-like functions (defining policies, standards), judicial-like functions (issue management, escalation), and executive functions (protecting and serving, administrative responsibilities).</p>
+
+      <div class="subsection-title ar">الهيئات الرئيسية في منظومة حوكمة البيانات</div>
+      <div class="subsection-title en-text">Key Bodies in the DG Ecosystem</div>
+
+      <table class="styled-table">
+        <tr><th class="ar">الهيئة</th><th class="ar">الدور</th><th class="en-text">Body</th><th class="en-text">Role</th></tr>
+        <tr>
+          <td class="ar">لجنة توجيه حوكمة البيانات</td>
+          <td class="ar">أعلى سلطة — تشمل كبار المديرين التنفيذيين. تُصدر التمويل وتوفر الرقابة الاستراتيجية.</td>
+          <td class="en-text">Data Governance Steering Committee</td>
+          <td class="en-text">Highest authority — cross-functional senior executives. Releases funding, provides strategic oversight.</td>
+        </tr>
+        <tr>
+          <td class="ar">مجلس حوكمة البيانات (DGC)</td>
+          <td class="ar">يدير مبادرات الحوكمة والسياسات والمشكلات والتصعيدات.</td>
+          <td class="en-text">Data Governance Council (DGC)</td>
+          <td class="en-text">Manages DG initiatives, policies, issues, and escalations.</td>
+        </tr>
+        <tr>
+          <td class="ar">مكتب حوكمة البيانات (DGO)</td>
+          <td class="ar">يركّز على التعريفات ومعايير إدارة البيانات على مستوى المؤسسة. يضم المشرفين والمسؤولين.</td>
+          <td class="en-text">Data Governance Office (DGO)</td>
+          <td class="en-text">Enterprise-level data definitions and standards. Comprises data stewards/custodians and owners.</td>
+        </tr>
+        <tr>
+          <td class="ar">فرق الإشراف على البيانات</td>
+          <td class="ar">مجتمعات مهتمة بمجالات موضوعية محددة، تتعاون مع فرق المشاريع.</td>
+          <td class="en-text">Data Stewardship Teams</td>
+          <td class="en-text">Communities focused on specific subject-areas, collaborating with project teams.</td>
+        </tr>
+        <tr>
+          <td class="ar">لجان حوكمة محلية</td>
+          <td class="ar">في المؤسسات الكبيرة — مجالس على مستوى الأقسام تعمل تحت DGC.</td>
+          <td class="en-text">Local DG Committees</td>
+          <td class="en-text">Large orgs — divisional DG councils working under the Enterprise DGC.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 6: OPERATING MODEL TYPES -->
+  <div class="section" id="s6">
+    <div class="section-header" onclick="toggleSection('s6')">
+      <div class="section-num">06</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">أنواع نماذج التشغيل</div>
+        <div class="section-title en-text">Operating Model Types</div>
+        <div class="section-subtitle ar">مركزي، مُنسوخ، اتحادي</div>
+        <div class="section-subtitle en-text">Centralized, Replicated, Federated</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="model-cards">
+        <div class="model-card">
+          <div class="m-title ar">🏛️ المركزي (Centralized)</div>
+          <div class="m-title en-text">🏛️ Centralized</div>
+          <div class="m-desc ar">منظمة حوكمة واحدة تشرف على جميع الأنشطة في جميع المجالات الموضوعية.</div>
+          <div class="m-desc en-text">One DG organization oversees all activities in all subject areas across the enterprise.</div>
+        </div>
+        <div class="model-card">
+          <div class="m-title ar">📋 المُنسوخ (Replicated)</div>
+          <div class="m-title en-text">📋 Replicated</div>
+          <div class="m-desc ar">نفس النموذج التشغيلي والمعايير تتبناه كل وحدة أعمال بشكل مستقل.</div>
+          <div class="m-desc en-text">Same DG operating model and standards are adopted independently by each business unit.</div>
+        </div>
+        <div class="model-card">
+          <div class="m-title ar">🌐 الاتحادي (Federated)</div>
+          <div class="m-title en-text">🌐 Federated</div>
+          <div class="m-desc ar">منظمة حوكمة مركزية تنسّق مع وحدات الأعمال للحفاظ على تعريفات ومعايير متسقة.</div>
+          <div class="m-desc en-text">One central DG org coordinates with multiple Business Units to maintain consistent definitions and standards.</div>
+        </div>
+      </div>
+      <div class="remember ar">💡 <strong>للحفظ:</strong> مركزي = سيطرة واحدة. منسوخ = نفس الوصفة في كل مكان. اتحادي = تنسيق مع استقلالية.</div>
+      <div class="remember en-text">💡 <strong>Remember:</strong> Centralized = one control. Replicated = same recipe everywhere. Federated = coordinate with autonomy.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: DATA STEWARDSHIP -->
+  <div class="section" id="s7">
+    <div class="section-header" onclick="toggleSection('s7')">
+      <div class="section-num">07</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">الإشراف على البيانات (Data Stewardship)</div>
+        <div class="section-title en-text">Data Stewardship</div>
+        <div class="section-subtitle ar">أنواع المشرفين ومسؤولياتهم</div>
+        <div class="section-subtitle en-text">Types of Stewards & Responsibilities</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="def-box">
+        <div class="def-label ar">التعريف</div>
+        <div class="def-label en-text">Definition</div>
+        <p class="ar">الإشراف على البيانات هو المسمى الأكثر شيوعاً لوصف المساءلة والمسؤولية عن البيانات والعمليات التي تضمن التحكم الفعّال في أصول البيانات واستخدامها.</p>
+        <p class="en-text">Data Stewardship is the most common label to describe accountability and responsibility for data and processes that ensure effective control and use of data assets.</p>
+      </div>
+
+      <div class="subsection-title ar">أنشطة الإشراف الرئيسية</div>
+      <div class="subsection-title en-text">Key Stewardship Activities</div>
+      <div class="pills">
+        <span class="pill ar">إنشاء وإدارة البيانات الوصفية الأساسية</span>
+        <span class="pill ar">توثيق القواعد والمعايير</span>
+        <span class="pill ar">إدارة مشكلات جودة البيانات</span>
+        <span class="pill ar">تنفيذ أنشطة حوكمة البيانات التشغيلية</span>
+        <span class="pill en-text">Create & Manage Core Metadata</span>
+        <span class="pill en-text">Document Rules & Standards</span>
+        <span class="pill en-text">Manage Data Quality Issues</span>
+        <span class="pill en-text">Execute Operational DG Activities</span>
+      </div>
+
+      <div class="subsection-title ar">أنواع مشرفي البيانات — من الأعلى للأدنى</div>
+      <div class="subsection-title en-text">Types of Data Stewards — Hierarchy</div>
+      <ul class="steward-list">
+        <li><span class="steward-badge ar">رئيس المشرفين</span><span class="steward-badge en-text">Chief Data Steward</span><span class="ar">يترأس هيئات حوكمة البيانات أو يعمل كـ CDO في نموذج اللجان الافتراضية.</span><span class="en-text">Chairs DG bodies or acts as CDO in virtual/committee-based DG organizations.</span></li>
+        <li><span class="steward-badge ar">مشرفو التنفيذيين</span><span class="steward-badge en-text">Executive Data Stewards</span><span class="ar">مديرون كبار يخدمون في مجلس حوكمة البيانات (DGC).</span><span class="en-text">Senior managers serving on the Data Governance Council.</span></li>
+        <li><span class="steward-badge ar">مشرفو المؤسسة</span><span class="steward-badge en-text">Enterprise Data Stewards</span><span class="ar">يشرفون على نطاق بيانات معين عبر الوظائف التجارية.</span><span class="en-text">Oversee a data domain across all business functions.</span></li>
+        <li><span class="steward-badge ar">مشرفو الأعمال</span><span class="steward-badge en-text">Business Data Stewards</span><span class="ar">متخصصون في الأعمال، خبراء موضوعيون، مسؤولون عن مجموعة فرعية من البيانات.</span><span class="en-text">Business professionals / SMEs accountable for a subset of data.</span></li>
+        <li><span class="steward-badge ar">مالك البيانات</span><span class="steward-badge en-text">Data Owner</span><span class="ar">شخص تجاري مسؤول عن قرارات البيانات داخل نطاقه.</span><span class="en-text">Business person accountable for decisions about data within their domain.</span></li>
+        <li><span class="steward-badge ar">مشرفون تقنيون</span><span class="steward-badge en-text">Technical Data Stewards</span><span class="ar">متخصصو تقنية المعلومات: DBAs، متخصصو BI، محللو جودة البيانات، إدارة البيانات الوصفية.</span><span class="en-text">IT professionals: DBAs, BI Specialists, DQ Analysts, Metadata Administrators.</span></li>
+        <li><span class="steward-badge ar">مشرفون منسّقون</span><span class="steward-badge en-text">Coordinating Data Stewards</span><span class="ar">يقودون فرق المشرفين ويمثلونها في نقاشات المؤسسة — حيويون في المنظمات الكبيرة.</span><span class="en-text">Lead and represent steward teams in cross-team discussions — critical in large organizations.</span></li>
+      </ul>
+
+      <div class="tips-box">
+        <div class="tips-title ar">💡 حكمة DMBOK</div>
+        <div class="tips-title en-text">💡 DMBOK Wisdom</div>
+        <p class="ar">"أفضل مشرفي البيانات غالباً ما يُعثر عليهم لا يُصنعون" — يُقرّ هذا بأن في معظم المؤسسات أشخاساً يقومون بالإشراف على البيانات غير رسمياً. إضفاء الطابع الرسمي على مسؤولياتهم يُمكّنهم من المساهمة أكثر. لكن يمكن أيضاً تدريب المشرفين وتطوير مهاراتهم.</p>
+        <p class="en-text">"The best Data Stewards are often found, not made" — acknowledges that in most organizations, people already steward data informally. Formalizing their roles enables greater contribution. But stewards can also be trained and developed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: POLICIES & ASSET VALUATION -->
+  <div class="section" id="s8">
+    <div class="section-header" onclick="toggleSection('s8')">
+      <div class="section-num">08</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">سياسات البيانات وتقييم الأصول</div>
+        <div class="section-title en-text">Data Policies & Asset Valuation</div>
+        <div class="section-subtitle ar">القواعد + القيمة الاقتصادية للبيانات</div>
+        <div class="section-subtitle en-text">Rules + Economic Value of Data</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="subsection-title ar">سياسات البيانات</div>
+      <div class="subsection-title en-text">Data Policies</div>
+      <p class="content-prose ar">سياسات البيانات هي توجيهات تُقنّن المبادئ وتُحدد النية الإدارية في قواعد أساسية تحكم إنشاء البيانات واكتسابها وأمانها وجودتها واستخدامها.</p>
+      <p class="content-prose en-text">Data policies are directives that codify principles and management intent into fundamental rules governing the creation, acquisition, integrity, security, quality, and use of data.</p>
+      <div class="pills">
+        <span class="pill outline ar">السياسة تُجيب على: ماذا نفعل؟</span>
+        <span class="pill outline ar">المعايير والإجراءات تُجيب على: كيف نفعل؟</span>
+        <span class="pill outline ar">يجب أن تكون قليلة وموجزة</span>
+        <span class="pill outline ar">على مستوى المؤسسة</span>
+        <span class="pill outline en-text">Policies describe "what to do"</span>
+        <span class="pill outline en-text">Standards/Procedures describe "how to do"</span>
+        <span class="pill outline en-text">Should be few and brief</span>
+        <span class="pill outline en-text">Enterprise-wide in scope</span>
+      </div>
+
+      <div class="subsection-title ar">تقييم أصول البيانات — طرق القياس</div>
+      <div class="subsection-title en-text">Data Asset Valuation — Measurement Methods</div>
+      <div class="cards-grid">
+        <div class="card"><div class="card-icon">🔄</div><div class="card-title ar">تكلفة الاستبدال</div><div class="card-title en-text">Replacement Cost</div><div class="card-desc ar">تكلفة استرداد البيانات المفقودة في كارثة أو اختراق</div><div class="card-desc en-text">Cost to recover lost data in a disaster or breach</div></div>
+        <div class="card"><div class="card-icon">📈</div><div class="card-title ar">القيمة السوقية</div><div class="card-title en-text">Market Value</div><div class="card-desc ar">القيمة كأصل تجاري عند الاندماج أو الاستحواذ</div><div class="card-desc en-text">Value as a business asset in mergers/acquisitions</div></div>
+        <div class="card"><div class="card-icon">🎯</div><div class="card-title ar">الفرص المُحدَّدة</div><div class="card-title en-text">Identified Opportunities</div><div class="card-desc ar">قيمة الدخل من الفرص المُكتشفة في البيانات</div><div class="card-desc en-text">Value of income from opportunities identified in data</div></div>
+        <div class="card"><div class="card-icon">🛒</div><div class="card-title ar">بيع البيانات</div><div class="card-title en-text">Selling Data</div><div class="card-desc ar">تعبئة البيانات كمنتج أو بيع الرؤى المستخلصة</div><div class="card-desc en-text">Packaging data as a product or selling insights</div></div>
+        <div class="card"><div class="card-icon">⚠️</div><div class="card-title ar">تكلفة المخاطر</div><div class="card-title en-text">Risk Cost</div><div class="card-desc ar">التقييم بناءً على الغرامات والتكاليف القانونية المحتملة</div><div class="card-desc en-text">Valuation based on potential penalties and litigation costs</div></div>
+      </div>
+
+      <div class="remember ar">💡 <strong>قاعدة ذهبية:</strong> البيانات لا تجلب قيمة إلا عند استخدامها. القيمة = الفائدة الاقتصادية من الاستخدام - تكلفة الاكتساب والتخزين وإدارة المخاطر.</div>
+      <div class="remember en-text">💡 <strong>Golden Rule:</strong> Data only brings value when it is used. Value = economic benefit of using data − costs of acquiring, storing, and managing risk related to usage.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: ACTIVITIES -->
+  <div class="section" id="s9">
+    <div class="section-header" onclick="toggleSection('s9')">
+      <div class="section-num">09</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">أنشطة تطبيق حوكمة البيانات</div>
+        <div class="section-title en-text">DG Implementation Activities</div>
+        <div class="section-subtitle ar">خارطة الطريق الكاملة للتطبيق</div>
+        <div class="section-subtitle en-text">Full Implementation Roadmap</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <table class="styled-table">
+        <tr><th class="ar">النشاط</th><th class="ar">الوصف</th><th class="en-text">Activity</th><th class="en-text">Description</th></tr>
+        <tr><td class="ar">2.1 تحديد الحوكمة للمؤسسة</td><td class="ar">تعريف النطاق — ما الذي يُحكم وعلى من تُطبَّق</td><td class="en-text">2.1 Define DG for the Organization</td><td class="en-text">Define scope — what is governed and who is governed</td></tr>
+        <tr><td class="ar">2.2 إجراء تقييم الاستعداد</td><td class="ar">تقييم النضج، قدرة التغيير، الاستعداد التعاوني، ومواءمة الأعمال</td><td class="en-text">2.2 Perform Readiness Assessment</td><td class="en-text">Assess maturity, change capacity, collaborative readiness, business alignment</td></tr>
+        <tr><td class="ar">2.3 الاكتشاف ومواءمة الأعمال</td><td class="ar">تحديد السياسات القائمة وتقييم المخاطر وربطها بالفوائد التجارية</td><td class="en-text">2.3 Discovery & Business Alignment</td><td class="en-text">Identify existing policies, assess risks, link to business benefits</td></tr>
+        <tr><td class="ar">2.4 تطوير نقاط التواصل المؤسسية</td><td class="ar">نقاط تواصل CDO: المشتريات، الميزانية، الامتثال، SDLC، تحسين الأصول</td><td class="en-text">2.4 Develop Org Touch Points</td><td class="en-text">CDO touch points: Procurement, Budget, Compliance, SDLC, Asset optimization</td></tr>
+        <tr><td class="ar">2.5 تطوير استراتيجية الحوكمة</td><td class="ar">الميثاق + الإطار + خارطة الطريق + خطة النجاح التشغيلي</td><td class="en-text">2.5 Develop DG Strategy</td><td class="en-text">Charter + Framework + Roadmap + Operations Plan</td></tr>
+        <tr><td class="ar">2.6 تحديد الإطار التشغيلي</td><td class="ar">يراعي: قيمة البيانات، نموذج الأعمال، العوامل الثقافية، تأثير التنظيم</td><td class="en-text">2.6 Define Operating Framework</td><td class="en-text">Considers: data value, business model, cultural factors, regulatory impact</td></tr>
+        <tr><td class="ar">2.7 الأهداف والمبادئ والسياسات</td><td class="ar">يصيغها متخصصو البيانات ← يراجعها المشرفون ← يعتمدها DGC</td><td class="en-text">2.7 Goals, Principles & Policies</td><td class="en-text">Drafted by DM professionals → reviewed by Stewards → adopted by DGC</td></tr>
+        <tr><td class="ar">2.8 رعاية مشاريع إدارة البيانات</td><td class="ar">DGC يُحدد حالة الأعمال ويشرف على مشاريع تحسين إدارة البيانات</td><td class="en-text">2.8 Underwrite DM Projects</td><td class="en-text">DGC defines business case and oversees DM improvement projects</td></tr>
+        <tr><td class="ar">2.9 إدارة التغيير التنظيمي</td><td class="ar">التخطيط، التدريب، التأثير على التطوير، تنفيذ السياسات، التواصل</td><td class="en-text">2.9 Engage Change Management</td><td class="en-text">Planning, Training, Influencing development, Policy implementation, Communications</td></tr>
+        <tr><td class="ar">2.10 إدارة المشكلات</td><td class="ar">تحديد وتحديد الأولويات وحل مشكلات السلطة والامتثال والصراعات والجودة</td><td class="en-text">2.10 Issue Management</td><td class="en-text">Identify, prioritize, resolve issues: authority, compliance, conflicts, quality</td></tr>
+        <tr><td class="ar">2.11 تقييم متطلبات الامتثال التنظيمي</td><td class="ar">GDPR، BCBS 239، PCI-DSS، Solvency II، قوانين الخصوصية</td><td class="en-text">2.11 Assess Regulatory Requirements</td><td class="en-text">GDPR, BCBS 239, PCI-DSS, Solvency II, Privacy laws</td></tr>
+        <tr><td class="ar">2.12 تطبيق حوكمة البيانات</td><td class="ar">تدريجياً — خارطة طريق تُنسّق الأنشطة المعقدة على مراحل</td><td class="en-text">2.12 Implement Data Governance</td><td class="en-text">Incrementally — roadmap coordinating complex activities in phases</td></tr>
+        <tr><td class="ar">2.13 رعاية معايير وإجراءات البيانات</td><td class="ar">إلزامية — تُحسّن الكفاءة وتوثّق المعرفة المؤسسية</td><td class="en-text">2.13 Sponsor Standards & Procedures</td><td class="en-text">Mandatory — improves efficiency and documents institutional knowledge</td></tr>
+        <tr><td class="ar">2.14 تطوير قاموس الأعمال</td><td class="ar">تعريفات موحّدة لمصطلحات البيانات لتقليل الغموض وتحسين التواصل</td><td class="en-text">2.14 Develop Business Glossary</td><td class="en-text">Standardized definitions to reduce ambiguity and improve communication</td></tr>
+        <tr><td class="ar">2.15 التنسيق مع مجموعات البنية</td><td class="ar">DGC يُشرف على نماذج البيانات المؤسسية ويوافق عليها</td><td class="en-text">2.15 Coordinate with Architecture</td><td class="en-text">DGC oversees and approves enterprise data models</td></tr>
+        <tr><td class="ar">2.16 تحديد منهجية تقييم أصول البيانات</td><td class="ar">نماذج لتقدير القيمة تُبرر حالات الأعمال لمبادرات الحوكمة</td><td class="en-text">2.16 Define Data Asset Valuation</td><td class="en-text">Value estimation models justify business cases for DG initiatives</td></tr>
+        <tr><td class="ar">2.17 تضمين حوكمة البيانات</td><td class="ar">خطة تشغيلية + استدامة + مجتمع مهتم بالحوكمة</td><td class="en-text">2.17 Embed Data Governance</td><td class="en-text">Operations plan + sustainability + DG Community of Interest</td></tr>
+      </table>
+
+      <!-- ESCALATION PYRAMID -->
+      <div class="subsection-title ar">هرم تصعيد مشكلات البيانات</div>
+      <div class="subsection-title en-text">Data Issue Escalation Pyramid</div>
+      <div class="pyramid-wrap">
+        <div class="pyramid-level"><span class="ar">لجنة توجيه حوكمة البيانات</span><span class="en-text">DG Steering Committee</span><span class="pct">&lt;5%</span></div>
+        <div class="pyramid-arrow">▲</div>
+        <div class="pyramid-level"><span class="ar">مجلس حوكمة البيانات (DGC)</span><span class="en-text">Data Governance Council</span><span class="pct">&lt;20%</span></div>
+        <div class="pyramid-arrow">▲</div>
+        <div class="pyramid-level"><span class="ar">حوكمة بيانات وحدة الأعمال</span><span class="en-text">Business Unit DG</span><span class="pct"></span></div>
+        <div class="pyramid-arrow">▲</div>
+        <div class="pyramid-level"><span class="ar">فرق الإشراف على البيانات — 80-85% من المشكلات تُحل هنا</span><span class="en-text">Data Stewardship Teams — 80–85% resolved here</span><span class="pct"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 10: TOOLS -->
+  <div class="section" id="s10">
+    <div class="section-header" onclick="toggleSection('s10')">
+      <div class="section-num">10</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">الأدوات والتقنيات</div>
+        <div class="section-title en-text">Tools & Techniques</div>
+        <div class="section-subtitle ar">التقنية تدعم — لكن لا تحل محل — الحوكمة</div>
+        <div class="section-subtitle en-text">Technology supports — but does not replace — governance</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <p class="content-prose ar">حوكمة البيانات في جوهرها تتعلق بالسلوك التنظيمي — ليست مشكلة يمكن حلّها بالتقنية وحدها. لكن الأدوات تدعم العملية الشاملة.</p>
+      <p class="content-prose en-text">DG is fundamentally about organizational behavior — not a problem solvable through technology alone. But tools do support the overall process.</p>
+      <div class="cards-grid">
+        <div class="card"><div class="card-icon">🌐</div><div class="card-title ar">البوابة الإلكترونية / الموقع</div><div class="card-title en-text">Online Presence / Website</div><div class="card-desc ar">الاستراتيجية، السياسات، المعايير، أدوار المشرفين، الأخبار، إجراءات تصعيد المشكلات</div><div class="card-desc en-text">Strategy, policies, standards, steward roles, news, issue escalation procedures</div></div>
+        <div class="card"><div class="card-icon">📖</div><div class="card-title ar">قاموس الأعمال</div><div class="card-title en-text">Business Glossary</div><div class="card-desc ar">أداة حوكمة أساسية — تعريفات المصطلحات التجارية وربطها بالبيانات</div><div class="card-desc en-text">Core DG tool — agreed definitions of business terms linked to data</div></div>
+        <div class="card"><div class="card-icon">⚙️</div><div class="card-title ar">أدوات سير العمل</div><div class="card-title en-text">Workflow Tools</div><div class="card-desc ar">لإدارة عمليات تطبيق السياسات وحل المشكلات في المؤسسات الكبيرة</div><div class="card-desc en-text">Manage policy implementation and issue resolution processes in larger orgs</div></div>
+        <div class="card"><div class="card-icon">📁</div><div class="card-title ar">أدوات إدارة الوثائق</div><div class="card-title en-text">Document Management</div><div class="card-desc ar">تستخدمها فرق الحوكمة لإدارة السياسات والإجراءات</div><div class="card-desc en-text">Used by governance teams to manage policies and procedures</div></div>
+        <div class="card"><div class="card-icon">📊</div><div class="card-title ar">بطاقات أداء الحوكمة</div><div class="card-title en-text">DG Scorecards</div><div class="card-desc ar">تتبع آلي لمؤشرات الأداء والامتثال تُرفع إلى DGC والمجلس التوجيهي</div><div class="card-desc en-text">Automated tracking of activity metrics and compliance, reported to DGC</td></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 11: METRICS -->
+  <div class="section" id="s11">
+    <div class="section-header" onclick="toggleSection('s11')">
+      <div class="section-num">11</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">مقاييس الأداء</div>
+        <div class="section-title en-text">Performance Metrics</div>
+        <div class="section-subtitle ar">كيف نُثبت أن الحوكمة تُضيف قيمة؟</div>
+        <div class="section-subtitle en-text">How do we prove DG adds value?</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-category ar">💰 القيمة</div>
+          <div class="metric-category en-text">💰 Value</div>
+          <div class="metric-item ar">المساهمة في الأهداف التجارية</div>
+          <div class="metric-item ar">تقليل المخاطر</div>
+          <div class="metric-item ar">تحسين الكفاءة التشغيلية</div>
+          <div class="metric-item en-text">Contributions to business objectives</div>
+          <div class="metric-item en-text">Reduction of risk</div>
+          <div class="metric-item en-text">Improved operational efficiency</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-category ar">🎯 الفاعلية</div>
+          <div class="metric-category en-text">🎯 Effectiveness</div>
+          <div class="metric-item ar">تحقيق الأهداف</div>
+          <div class="metric-item ar">استخدام المشرفين للأدوات</div>
+          <div class="metric-item ar">فاعلية التواصل والتدريب</div>
+          <div class="metric-item ar">سرعة تبني التغيير</div>
+          <div class="metric-item en-text">Achievement of goals</div>
+          <div class="metric-item en-text">Steward tool usage</div>
+          <div class="metric-item en-text">Communication effectiveness</div>
+          <div class="metric-item en-text">Speed of change adoption</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-category ar">🌱 الاستدامة</div>
+          <div class="metric-category en-text">🌱 Sustainability</div>
+          <div class="metric-item ar">أداء السياسات والعمليات</div>
+          <div class="metric-item ar">الامتثال للمعايير والإجراءات</div>
+          <div class="metric-item ar">تغيير السلوك الفعلي</div>
+          <div class="metric-item en-text">Policy & process performance</div>
+          <div class="metric-item en-text">Conformance to standards</div>
+          <div class="metric-item en-text">Actual behavior change</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 12: QUICK RECALL -->
+  <div class="section" id="s12">
+    <div class="section-header" onclick="toggleSection('s12')">
+      <div class="section-num">12</div>
+      <div class="section-title-wrap">
+        <div class="section-title ar">بطاقة المراجعة السريعة — للاختبار والحفظ</div>
+        <div class="section-title en-text">Quick Recall Card — For Exam & Memory</div>
+        <div class="section-subtitle ar">المفاهيم المحورية دفعة واحدة</div>
+        <div class="section-subtitle en-text">All pivotal concepts at a glance</div>
+      </div>
+      <div class="section-arrow">▼</div>
+    </div>
+    <div class="section-body">
+      <table class="styled-table">
+        <tr><th class="ar">السؤال</th><th class="ar">الإجابة</th><th class="en-text">Question</th><th class="en-text">Answer</th></tr>
+        <tr><td class="ar">تعريف DG؟</td><td class="ar">ممارسة السلطة والرقابة (تخطيط + تطبيق + مراقبة + إنفاذ) على إدارة أصول البيانات</td><td class="en-text">Define DG?</td><td class="en-text">Exercise of authority and control (planning, implementation, monitoring, enforcement) over data asset management</td></tr>
+        <tr><td class="ar">الهدف الرئيسي لـ DG؟</td><td class="ar">إدارة البيانات كأصل استراتيجي</td><td class="en-text">Primary goal of DG?</td><td class="en-text">Manage data as a strategic asset</td></tr>
+        <tr><td class="ar">الشرط الثلاثي لـ DG الفعّالة؟</td><td class="ar">مستدامة + مُدمجة + قابلة للقياس</td><td class="en-text">3 requirements for effective DG?</td><td class="en-text">Sustainable + Embedded + Measured</td></tr>
+        <tr><td class="ar">الفرق بين DG وDM؟</td><td class="ar">DG = رقابة (إشراف). DM = تنفيذ</td><td class="en-text">DG vs DM difference?</td><td class="en-text">DG = oversight. DM = execution</td></tr>
+        <tr><td class="ar">أنواع نماذج التشغيل الثلاثة؟</td><td class="ar">مركزي، منسوخ، اتحادي</td><td class="en-text">3 Operating Model Types?</td><td class="en-text">Centralized, Replicated, Federated</td></tr>
+        <tr><td class="ar">أعلى هيئة في DG؟</td><td class="ar">لجنة التوجيه (Steering Committee)</td><td class="en-text">Highest DG body?</td><td class="en-text">Data Governance Steering Committee</td></tr>
+        <tr><td class="ar">مَن يُعالج 80-85% من مشكلات البيانات؟</td><td class="ar">فرق الإشراف على البيانات (Data Stewardship Teams)</td><td class="en-text">Who resolves 80-85% of data issues?</td><td class="en-text">Data Stewardship Teams</td></tr>
+        <tr><td class="ar">تعريف Data Stewardship؟</td><td class="ar">المساءلة والمسؤولية عن البيانات والعمليات لضمان التحكم الفعّال</td><td class="en-text">Define Data Stewardship?</td><td class="en-text">Accountability and responsibility for data and processes ensuring effective control</td></tr>
+        <tr><td class="ar">ماذا تُجيب السياسة؟</td><td class="ar">ماذا نفعل</td><td class="en-text">What does Policy answer?</td><td class="en-text">What to do</td></tr>
+        <tr><td class="ar">ماذا تُجيب المعايير والإجراءات؟</td><td class="ar">كيف نفعل</td><td class="en-text">What do Standards/Procedures answer?</td><td class="en-text">How to do it</td></tr>
+        <tr><td class="ar">المحرك الأكثر شيوعاً لـ DG؟</td><td class="ar">الامتثال التنظيمي</td><td class="en-text">Most common DG driver?</td><td class="en-text">Regulatory compliance</td></tr>
+        <tr><td class="ar">معيار IT Governance؟</td><td class="ar">COBIT</td><td class="en-text">IT Governance standard?</td><td class="en-text">COBIT</td></tr>
+        <tr><td class="ar">معيار Data Governance؟</td><td class="ar">DAMA-DMBOK</td><td class="en-text">Data Governance framework?</td><td class="en-text">DAMA-DMBOK</td></tr>
+        <tr><td class="ar">متى تُجلب البيانات قيمة؟</td><td class="ar">فقط عند استخدامها</td><td class="en-text">When does data bring value?</td><td class="en-text">Only when it is used</td></tr>
+        <tr><td class="ar">ما هو قاموس الأعمال؟</td><td class="ar">أداة حوكمة أساسية تضم تعريفات مصطلحات الأعمال المتفق عليها</td><td class="en-text">What is a Business Glossary?</td><td class="en-text">Core DG tool housing agreed definitions of business terms linked to data</td></tr>
+        <tr><td class="ar">المبادئ الستة لـ DG؟</td><td class="ar">القيادة، موجّهة بالأعمال، مشتركة، متعددة المستويات، قائمة على الإطار، قائمة على المبادئ</td><td class="en-text">6 DG Principles?</td><td class="en-text">Leadership, Business-driven, Shared, Multi-layered, Framework-based, Principle-based</td></tr>
+      </table>
+
+      <div class="tips-box">
+        <div class="tips-title ar">🎓 نصيحة لمرشح CDMP</div>
+        <div class="tips-title en-text">🎓 Advice for the CDMP Candidate</div>
+        <p class="ar">اختبار CDMP يُركّز على الفهم المفاهيمي لا التفاصيل الإجرائية. ركّز على: تعريف DG، الفرق بين DG وDM، أنواع المشرفين، نماذج التشغيل الثلاثة، وهرم التصعيد. هذه الدروس الأساسية ستظهر في شكل سيناريوهات — تدرّب على التطبيق لا الحفظ فقط.</p>
+        <p class="en-text">The CDMP exam focuses on conceptual understanding, not procedural details. Focus on: DG definition, DG vs DM distinction, types of stewards, 3 operating model types, and the escalation hierarchy. These core lessons will appear as scenarios — practice application, not just memorization.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- COPYRIGHT -->
+<div class="copyright-bar">
+  <p class="ar">
+    📚 <strong>إعداد وتنظيم:</strong> عبدالمجيد دليل | مُحلّل Power BI · CDMP<br>
+    استناداً إلى: <strong>DAMA-DMBOK2، الطبعة الثانية (2017) — الفصل الثالث: حوكمة البيانات</strong><br>
+    © DAMA International 2017 | الطبعة المنقّحة الأخيرة: Technics Publications, 2024<br>
+    هذا الدليل للأغراض التعليمية الشخصية فقط — جميع حقوق المحتوى الأصلي محفوظة لـ DAMA International
+  </p>
+  <p class="en-text">
+    📚 <strong>Organized & Compiled by:</strong> Abdulmajeed Daleel | Power BI Analyst · CDMP<br>
+    Based on: <strong>DAMA-DMBOK2, 2nd Edition (2017) — Chapter 3: Data Governance</strong><br>
+    © DAMA International 2017 | Latest Revised Edition: Technics Publications, 2024<br>
+    This guide is for personal educational purposes only — all rights to original content reserved by DAMA International
+  </p>
+</div>
+
+<script>
+  function toggleLang() {
+    const body = document.body;
+    const btn = document.getElementById('langBtn');
+    if (body.classList.contains('en')) {
+      body.classList.remove('en');
+      body.setAttribute('dir', 'rtl');
+      body.setAttribute('lang', 'ar');
+      btn.textContent = '🌐 English';
+    } else {
+      body.classList.add('en');
+      body.setAttribute('dir', 'ltr');
+      body.setAttribute('lang', 'en');
+      btn.textContent = '🌐 العربية';
+    }
+  }
+
+  function toggleSection(id) {
+    const sec = document.getElementById(id);
+    sec.classList.toggle('open');
+  }
+
+  function openSection(id) {
+    const sec = document.getElementById(id);
+    sec.classList.add('open');
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Stagger section animations
+  document.querySelectorAll('.section').forEach((s, i) => {
+    s.style.animationDelay = (i * 0.05) + 's';
+  });
+</script>
+</body>
+</html>
